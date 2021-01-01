@@ -46,16 +46,16 @@ end
 
 # in-place for x or dy
 softmax(x::DenseCuArray{T}; dims=1) where T<:CUDNNFloat =
-  softmax!(x, x, dims=dims)
+  softmax!(similar(x), x, dims=dims)
 
 ∇softmax(dy::DenseCuArray{T}, x::DenseCuArray{T}; dims=1) where T<:CUDNNFloat =
-  ∇softmax!(dy, dy, x, dims=dims)
+  ∇softmax!(similar(dy), dy, x, dims=dims)
 
 logsoftmax(x::DenseCuArray{T}; dims=1) where T<:CUDNNFloat =
-  logsoftmax!(x, x, dims=dims)
+  logsoftmax!(similar(x), x, dims=dims)
 
 ∇logsoftmax(dy::DenseCuArray{T}, x::DenseCuArray{T}; dims=1) where T<:CUDNNFloat =
-  ∇logsoftmax!(dy, dy, x, dims=dims)
+  ∇logsoftmax!(similar(dy), dy, x, dims=dims)
 
 function softmax!(y::DenseCuArray{T}, x::DenseCuArray{T}; dims=1) where T<:CUDNNFloat
   cudnnSoftmaxForward(reshape4D(x), reshape4D(y),
