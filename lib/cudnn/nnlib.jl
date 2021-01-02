@@ -59,14 +59,14 @@ logsoftmax(x::DenseCuArray{T}; dims=1) where T<:CUDNNFloat =
 
 function softmax!(y::DenseCuArray{T}, x::DenseCuArray{T}; dims=1) where T<:CUDNNFloat
   cudnnSoftmaxForward(reshape4D(x), reshape4D(y),
-                      algo=CUDNN_SOFTMAX_FAST, mode=cudnnSoftmaxMode_t(dims-1))
+                      algo=CUDNN_SOFTMAX_ACCURATE, mode=cudnnSoftmaxMode_t(dims-1))
   return y
 end
 
 function ∇softmax!(dx::DenseCuArray{T}, dy::DenseCuArray{T}, x::DenseCuArray{T}; dims=1) where T<:CUDNNFloat
   y = softmax(x, dims=dims)
   cudnnSoftmaxBackward(reshape4D(y), reshape4D(dy), reshape4D(dx),
-                       algo=CUDNN_SOFTMAX_FAST, mode=cudnnSoftmaxMode_t(dims-1))
+                       algo=CUDNN_SOFTMAX_ACCURATE, mode=cudnnSoftmaxMode_t(dims-1))
   return dx
 end
 
